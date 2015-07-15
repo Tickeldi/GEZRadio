@@ -5,12 +5,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
 import de.gezradio.exceptions.UnsupportedFileTypeException;
 
-public class Folge {
-
+public class Folge implements Comparable<Folge>{
+	
+	private final Sendung sendung;
 	private MP3UrlFile audioDatei;
 	private String titel;
 	private URL url;
@@ -18,19 +21,28 @@ public class Folge {
 	private Image bild;
 	private String beschreibung;
 	private int laenge;
+	private Date gesendet;
 	
 
-	public Folge(URL url) throws IOException, UnsupportedFileTypeException {
+	public Folge(URL url, Sendung sendung) throws IOException, UnsupportedFileTypeException {
 		audioDatei = new MP3UrlFile(url);
 		titel = url.getPath().replaceAll(".+/|\\..*", "");
+		this.sendung = sendung;
 	}
 	
-	public Folge(String titel, Image bild, URL url, String beschreibung, int laenge) {
+	public Folge(String titel,
+			Image bild, 
+			URL url, 
+			String beschreibung, 
+			int laenge, 
+			Sendung sendung,
+			Date gesendet) {
 		this.titel = titel;
 		this.bild = bild;
 		this.url = url;
 		this.beschreibung = beschreibung;
 		this.laenge = laenge;
+		this.sendung = sendung;
 	}
 	
 	private MP3UrlFile getAudioDatei() 
@@ -56,7 +68,7 @@ public class Folge {
 	}
 	
 	public File downloadFile(File target) throws IOException {
-		if(!file.exists()) {
+		if(file == null || !file.exists()) {
 			FileOutputStream out = new FileOutputStream(target);
 			InputStream in = url.openStream();
 			
@@ -70,6 +82,10 @@ public class Folge {
 	
 	public File getFile() {
 		return file;
+	}
+	
+	public void deleteFile() {
+		file.delete();
 	}
 	
 	public String getTitel() {
@@ -86,6 +102,12 @@ public class Folge {
 
 	public void setUrl(URL url) {
 		this.url = url;
+	}
+	
+	public boolean urlFileExists() throws IOException {
+		HttpURLConnection huc =  (HttpURLConnection)  url.openConnection();
+		huc.setRequestMethod("HEAD");
+		return (huc.getResponseCode() == HttpURLConnection.HTTP_OK);
 	}
 
 	public Image getBild() {
@@ -110,5 +132,39 @@ public class Folge {
 
 	public void setLaenge(int laenge) {
 		this.laenge = laenge;
+	}
+	
+	public Sendung getSendung() {
+		return sendung;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Folge other = (Folge) obj;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(Folge o) {
+		return url.getPath().compareTo(o.url.getPath());
 	}
 }

@@ -119,19 +119,15 @@ public class MP3UrlFile {
 		if(check[0] != 255) return false;
 
 		int b = (check[1] >> 3) & 3;
-
 		if(b == 0 || b == 1) return false;
 
 		int c = (check[1] >> 1) & 3;
-
 		if(c != 1) return false;
 
 		int e = (check[2] >> 4) & 15;
-
 		if(e == 255 || e == 0) return false;
 
 		int f = (check[2] >> 2) & 3;
-
 		if(f > 2) return false;
 
 		return true;

@@ -22,7 +22,6 @@ public class Folge implements Comparable<Folge>{
 	private String beschreibung;
 	private int laenge;
 	private Date gesendet;
-	
 
 	public Folge(URL url, Sendung sendung) throws IOException, UnsupportedFileTypeException {
 		audioDatei = new MP3UrlFile(url);
@@ -137,6 +136,15 @@ public class Folge implements Comparable<Folge>{
 	public Sendung getSendung() {
 		return sendung;
 	}
+	
+	public Date getGesendet() {
+		return gesendet;
+	}
+
+	public void setGesendet(Date gesendet) {
+		this.gesendet = gesendet;
+	}
+
 
 	@Override
 	public int hashCode() {

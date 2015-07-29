@@ -37,6 +37,10 @@ public class MP3UrlFile {
 	public URL getUrl() {
 		return url;
 	}
+	
+	public int getLayer() {
+		return layer;
+	}
 
 
 	private int versionID;

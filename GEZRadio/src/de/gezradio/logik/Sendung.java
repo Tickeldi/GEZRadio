@@ -47,6 +47,10 @@ public class Sendung {
 		return changed;
 	}
 	
+	public boolean update() {
+		return sender.getFabrik().updateSendung(this);
+	}
+	
 	public SortedSet<Folge> getFolgen() {
 		
 		return Collections.unmodifiableSortedSet(folgen);

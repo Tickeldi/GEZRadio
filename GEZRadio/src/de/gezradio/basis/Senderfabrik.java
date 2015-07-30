@@ -5,5 +5,5 @@ import de.gezradio.logik.Sendung;
 
 public interface Senderfabrik {
 	public Sender getSender();
-	public void updateSendung(Sendung sendung);
+	public boolean updateSendung(Sendung sendung);
 }

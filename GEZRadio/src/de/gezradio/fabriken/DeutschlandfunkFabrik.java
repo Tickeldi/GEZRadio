@@ -13,8 +13,8 @@ public class DeutschlandfunkFabrik implements Senderfabrik {
 	}
 
 	@Override
-	public void updateSendung(Sendung sendung) {
-		// TODO Auto-generated method stub
+	public boolean updateSendung(Sendung sendung) {
+		return false;
 		
 	}
 

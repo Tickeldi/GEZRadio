@@ -4,13 +4,24 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.gezradio.basis.Senderfabrik;
+
 public class Sender {
 	private String name;
+	private Senderfabrik fabrik;
 	
-	public Sender(String name, String beschreibung, Image bild) {
+	public Senderfabrik getFabrik() {
+		return fabrik;
+	}
+
+	public Sender(String name, 
+			String beschreibung, 
+			Image bild, 
+			Senderfabrik fabrik) {
 		this.name = name;
 		this.beschreibung = beschreibung;
 		this.bild = bild;
+		this.fabrik = fabrik;
 	}
 
 	private String beschreibung;

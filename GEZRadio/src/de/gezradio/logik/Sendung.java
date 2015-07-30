@@ -48,6 +48,7 @@ public class Sendung {
 	}
 	
 	public SortedSet<Folge> getFolgen() {
+		
 		return Collections.unmodifiableSortedSet(folgen);
 	}
 

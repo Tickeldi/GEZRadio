@@ -62,7 +62,7 @@ public class MP3UrlFile {
 		
 		int[] headerArray = new int[4];
 		
-		while(!isHeader(headerArray)) {
+		while(!isHeader(headerArray) && headerArray[3] != -1) {
 			headerArray[0] = headerArray[1];
 			headerArray[1] = headerArray[2];
 			headerArray[2] = headerArray[3];

@@ -1,23 +1,26 @@
 package de.gezradio.logik;
 
 import java.awt.Image;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.gezradio.basis.Senderfabrik;
+import javax.xml.stream.XMLStreamException;
+
+import de.gezradio.basis.ISenderfabrik;
 
 public class Sender {
 	private String name;
-	private Senderfabrik fabrik;
+	private ISenderfabrik fabrik;
 	
-	public Senderfabrik getFabrik() {
+	public ISenderfabrik getFabrik() {
 		return fabrik;
 	}
 
 	public Sender(String name, 
 			String beschreibung, 
 			Image bild, 
-			Senderfabrik fabrik) {
+			ISenderfabrik fabrik) {
 		this.name = name;
 		this.beschreibung = beschreibung;
 		this.bild = bild;
@@ -35,6 +38,12 @@ public class Sender {
 	
 	public void removeSendung(Sendung sendung) {
 		sendungen.remove(sendung);
+	}
+	
+	public void update() throws IOException, XMLStreamException {
+		for(Sendung sendung:sendungen) {
+			sendung.update();
+		}
 	}
 
 	public String getName() {

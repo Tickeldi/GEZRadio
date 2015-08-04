@@ -2,25 +2,34 @@ package de.gezradio.logik;
 
 import java.awt.Image;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.xml.stream.XMLStreamException;
+
 public class Sendung {
 	private String titel;
 	private String beschreibung;
 	private Image bild;
 	private Sender sender;
+	private URL podcasturl;
 
 	private TreeSet<Folge> folgen = new TreeSet<>();
 
-	public Sendung(String titel, String beschreibung, Image bild, Sender sender) {
+	public Sendung(String titel, 
+			String beschreibung, 
+			Image bild, 
+			Sender sender,
+			URL podcasturl) {
 		this.titel = titel;
 		this.beschreibung = beschreibung;
 		this.bild = bild;
 		this.sender = sender;
+		this.podcasturl = podcasturl;
 	}
 	
 	public void addFolge(Folge folge) {
@@ -47,7 +56,7 @@ public class Sendung {
 		return changed;
 	}
 	
-	public boolean update() {
+	public boolean update() throws IOException, XMLStreamException {
 		return sender.getFabrik().updateSendung(this);
 	}
 	
@@ -82,5 +91,9 @@ public class Sendung {
 	
 	public Sender getSender() {
 		return sender;
+	}
+	
+	public URL getURL() {
+		return podcasturl;
 	}
 }

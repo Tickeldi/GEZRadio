@@ -16,12 +16,14 @@ public class Folge implements Comparable<Folge>{
 	private final Sendung sendung;
 	private MP3UrlFile audioDatei;
 	private String titel;
-	private URL url;
+	private URL fileurl;
+	private URL artikelurl;
 	private File file;
 	private Image bild;
 	private String beschreibung;
 	private int laenge;
 	private Date gesendet;
+	
 
 	public Folge(URL url, Sendung sendung) throws IOException, UnsupportedFileTypeException {
 		audioDatei = new MP3UrlFile(url);
@@ -38,7 +40,7 @@ public class Folge implements Comparable<Folge>{
 			Date gesendet) {
 		this.titel = titel;
 		this.bild = bild;
-		this.url = url;
+		this.fileurl = url;
 		this.beschreibung = beschreibung;
 		this.laenge = laenge;
 		this.sendung = sendung;
@@ -47,7 +49,7 @@ public class Folge implements Comparable<Folge>{
 	private MP3UrlFile getAudioDatei() 
 			throws IOException, UnsupportedFileTypeException {
 		if(audioDatei == null)
-			audioDatei = new MP3UrlFile(url);
+			audioDatei = new MP3UrlFile(fileurl);
 		return audioDatei;
 	}
 
@@ -69,7 +71,7 @@ public class Folge implements Comparable<Folge>{
 	public File downloadFile(File target) throws IOException {
 		if(file == null || !file.exists()) {
 			FileOutputStream out = new FileOutputStream(target);
-			InputStream in = url.openStream();
+			InputStream in = fileurl.openStream();
 			
 			new DirectedStream(in, out);
 
@@ -96,15 +98,15 @@ public class Folge implements Comparable<Folge>{
 	}
 
 	public URL getUrl() {
-		return url;
+		return fileurl;
 	}
 
 	public void setUrl(URL url) {
-		this.url = url;
+		this.fileurl = url;
 	}
 	
 	public boolean urlFileExists() throws IOException {
-		HttpURLConnection huc =  (HttpURLConnection)  url.openConnection();
+		HttpURLConnection huc =  (HttpURLConnection)  fileurl.openConnection();
 		huc.setRequestMethod("HEAD");
 		return (huc.getResponseCode() == HttpURLConnection.HTTP_OK);
 	}
@@ -144,13 +146,20 @@ public class Folge implements Comparable<Folge>{
 	public void setGesendet(Date gesendet) {
 		this.gesendet = gesendet;
 	}
-
+	
+	public URL getArtikelURL() {
+		return artikelurl;
+	}
+	
+	public void setArtikelURL(URL artikelurl) {
+		this.artikelurl = artikelurl;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		result = prime * result + ((fileurl == null) ? 0 : fileurl.hashCode());
 		return result;
 	}
 
@@ -163,16 +172,16 @@ public class Folge implements Comparable<Folge>{
 		if (getClass() != obj.getClass())
 			return false;
 		Folge other = (Folge) obj;
-		if (url == null) {
-			if (other.url != null)
+		if (fileurl == null) {
+			if (other.fileurl != null)
 				return false;
-		} else if (!url.equals(other.url))
+		} else if (!fileurl.equals(other.fileurl))
 			return false;
 		return true;
 	}
 
 	@Override
 	public int compareTo(Folge o) {
-		return url.getPath().compareTo(o.url.getPath());
+		return fileurl.getPath().compareTo(o.fileurl.getPath());
 	}
 }

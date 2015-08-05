@@ -9,16 +9,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.stream.XMLStreamException;
-
 import de.gezradio.basis.ISenderfabrik;
+import de.gezradio.exceptions.PluginBrokenException;
 import de.gezradio.logik.Folge;
 import de.gezradio.logik.Sender;
 import de.gezradio.logik.Sendung;
 
 public abstract class Fabrikvorlage implements ISenderfabrik {
 	
-	abstract List<Folge> getFolgen(Sendung sendung) throws IOException, XMLStreamException;
+	private Sendung sendung;
+	
+	abstract List<Folge> getFolgen(Sendung sendung) throws PluginBrokenException, IOException;
 	
 	Sendung getSendung(
 			String titel, 
@@ -26,16 +27,17 @@ public abstract class Fabrikvorlage implements ISenderfabrik {
 			Image bild, 
 			Sender sender,
 			URL podcasturl
-			) throws IOException, XMLStreamException {
-		Sendung sendung = new Sendung(
-				titel, 
-				beschreibung, 
-				bild, 
-				sender, 
-				podcasturl
-				);
-
-		sendung.update(getFolgen(sendung));
+			) throws PluginBrokenException, IOException {
+		if(sendung == null) {
+			sendung = new Sendung(
+					titel, 
+					beschreibung, 
+					bild, 
+					sender, 
+					podcasturl
+					);
+			//sendung.update(getFolgen(sendung));
+		}
 
 		return sendung;
 	}
@@ -56,11 +58,11 @@ public abstract class Fabrikvorlage implements ISenderfabrik {
 	}
 
 	@Override
-	public abstract Sender getSender() throws IOException, XMLStreamException;
+	public abstract Sender getSender() throws IOException;
 
 	@Override
 	public boolean updateSendung(Sendung sendung) throws IOException,
-			XMLStreamException {
+	PluginBrokenException {
 		return sendung.update(getFolgen(sendung));
 	}
 

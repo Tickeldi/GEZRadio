@@ -182,6 +182,6 @@ public class Folge implements Comparable<Folge>{
 
 	@Override
 	public int compareTo(Folge o) {
-		return fileurl.getPath().compareTo(o.fileurl.getPath());
+		return gesendet.compareTo(o.gesendet);
 	}
 }

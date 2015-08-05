@@ -4,21 +4,21 @@ import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
 
-import javax.xml.stream.XMLStreamException;
+import de.gezradio.exceptions.PluginBrokenException;
 
-public class Sendung {
+public class Sendung implements Comparable<Sendung>{
 	private String titel;
 	private String beschreibung;
 	private Image bild;
 	private Sender sender;
 	private URL podcasturl;
 
-	private TreeSet<Folge> folgen = new TreeSet<>();
+	private Set<Folge> folgen = new HashSet<>();
 
 	public Sendung(String titel, 
 			String beschreibung, 
@@ -56,13 +56,13 @@ public class Sendung {
 		return changed;
 	}
 	
-	public boolean update() throws IOException, XMLStreamException {
+	public boolean update() throws IOException, PluginBrokenException {
 		return sender.getFabrik().updateSendung(this);
 	}
 	
-	public SortedSet<Folge> getFolgen() {
+	public Set<Folge> getFolgen() {
 		
-		return Collections.unmodifiableSortedSet(folgen);
+		return Collections.unmodifiableSet(folgen);
 	}
 
 	public String getTitel() {
@@ -96,4 +96,37 @@ public class Sendung {
 	public URL getURL() {
 		return podcasturl;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((titel == null) ? 0 : titel.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sendung other = (Sendung) obj;
+		if (titel == null) {
+			if (other.titel != null)
+				return false;
+		} else if (!titel.equals(other.titel))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(Sendung o) {
+		return titel.compareTo(o.titel);
+	}
+
+	
+	
 }

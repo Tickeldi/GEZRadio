@@ -2,12 +2,12 @@ package de.gezradio.logik;
 
 import java.awt.Image;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.stream.XMLStreamException;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import de.gezradio.basis.ISenderfabrik;
+import de.gezradio.exceptions.PluginBrokenException;
 
 public class Sender {
 	private String name;
@@ -30,8 +30,8 @@ public class Sender {
 	private String beschreibung;
 	private Image bild;
 	
-	private List<Sendung> sendungen = new ArrayList<>();
-	
+	private SortedSet<Sendung> sendungen = new TreeSet<>();
+
 	public void addSendung(Sendung sendung) {
 		sendungen.add(sendung);
 	}
@@ -40,7 +40,7 @@ public class Sender {
 		sendungen.remove(sendung);
 	}
 	
-	public void update() throws IOException, XMLStreamException {
+	public void update() throws IOException, PluginBrokenException {
 		for(Sendung sendung:sendungen) {
 			sendung.update();
 		}
@@ -70,6 +70,7 @@ public class Sender {
 		this.bild = bild;
 	}
 	
-	
-
+	public SortedSet<Sendung> getSendungen() {
+		return sendungen;
+	}
 }

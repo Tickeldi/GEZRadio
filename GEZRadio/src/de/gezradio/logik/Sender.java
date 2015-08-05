@@ -2,7 +2,6 @@ package de.gezradio.logik;
 
 import java.awt.Image;
 import java.io.IOException;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 

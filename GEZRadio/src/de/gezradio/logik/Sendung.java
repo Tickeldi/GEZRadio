@@ -126,7 +126,4 @@ public class Sendung implements Comparable<Sendung>{
 	public int compareTo(Sendung o) {
 		return titel.compareTo(o.titel);
 	}
-
-	
-	
 }

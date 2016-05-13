@@ -10,8 +10,8 @@ import de.gezradio.exceptions.UnsupportedFileTypeException;
 
 public class MP3UrlFile {
 	
-	private final int[] version1Bitrates = {0, 32, 40, 48, 56, 64, 80, 96, 112, 128,
-			160, 192, 224, 256, 320, 0};
+	private final static int[] VERSION_1_BITRATES = 
+		{0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0};
 	
 	private int bytesRead;
 	public int getVersionID() {
@@ -81,7 +81,7 @@ public class MP3UrlFile {
 			
 			int e = (headerArray[2] >> 4) & 15;
 			if(versionID == 1)
-				bitrate = version1Bitrates[e];
+				bitrate = VERSION_1_BITRATES[e];
 			
 			int f = (headerArray[2] >> 2) & 3;
 			

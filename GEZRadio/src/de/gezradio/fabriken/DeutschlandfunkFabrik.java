@@ -130,15 +130,17 @@ public class DeutschlandfunkFabrik extends Fabrikvorlage implements ISenderfabri
 					if ( ! parser.isWhiteSpace() ) {
 						if (aktuelleFolge == null) {
 							if(
-									aktuellesElement.equals("description")
-									&& (sendung.getBeschreibung() == null 
-									|| sendung.getBeschreibung().isEmpty())
-									)
+								aktuellesElement.equals("description")
+								&& (sendung.getBeschreibung() == null 
+								|| sendung.getBeschreibung().isEmpty())
+							) {
 								sendung.setBeschreibung(parser.getText());
+							}
 
 							else if (aktuellesElement.equals("url")
-									&& sendung.getBild() == null)
-								ImageIO.read(new URL(parser.getText()));
+									&& sendung.getBild() == null) {
+								sendung.setBild(ImageIO.read(new URL(parser.getText())));
+							}
 						}
 						
 						else {
@@ -184,4 +186,6 @@ public class DeutschlandfunkFabrik extends Fabrikvorlage implements ISenderfabri
 		}
 		return folgen;
 	}
+	
+	
 }

@@ -3,33 +3,37 @@ package de.gezradio.logik;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
+import de.gezradio.basis.ISenderfabrik;
 import de.gezradio.exceptions.PluginBrokenException;
 
-public class Sendung implements Comparable<Sendung>{
-	private String titel;
-	private String beschreibung;
-	private Image bild;
-	private Sender sender;
-	private URL podcasturl;
 
-	private Set<Folge> folgen = new HashSet<>();
+public class Sendung implements Comparable<Sendung>{
+	private final String titel;
+	private final String beschreibung;
+	private final Image bild;
+	private final Sender sender;
+	private final URL podcasturl;
+	private final ISenderfabrik fabrik;
+
+	private List<Folge> folgen = new ArrayList<>();
 
 	public Sendung(String titel, 
 			String beschreibung, 
 			Image bild, 
 			Sender sender,
-			URL podcasturl) {
+			URL podcasturl,
+			ISenderfabrik fabrik) {
 		this.titel = titel;
 		this.beschreibung = beschreibung;
 		this.bild = bild;
 		this.sender = sender;
 		this.podcasturl = podcasturl;
+		this.fabrik = fabrik;
 	}
 	
 	public void addFolge(Folge folge) {
@@ -56,37 +60,30 @@ public class Sendung implements Comparable<Sendung>{
 		return changed;
 	}
 	
-	public boolean update() throws IOException, PluginBrokenException {
-		return sender.getFabrik().updateSendung(this);
+	public List<Folge> getFolgen() 
+			throws IOException, PluginBrokenException {
+		if(folgen == null || folgen.isEmpty()) {
+			return getNeueFolgen();
+		}
+		return Collections.unmodifiableList(folgen);
 	}
 	
-	public Set<Folge> getFolgen() {
-		
-		return Collections.unmodifiableSet(folgen);
+	public List<Folge> getNeueFolgen() 
+			throws IOException, PluginBrokenException {
+		folgen = fabrik.getFolgen(this);
+		return Collections.unmodifiableList(folgen);
 	}
 
 	public String getTitel() {
 		return titel;
 	}
 
-	public void setTitel(String titel) {
-		this.titel = titel;
-	}
-
 	public String getBeschreibung() {
 		return beschreibung;
 	}
 
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
-	}
-
 	public Image getBild() {
 		return bild;
-	}
-
-	public void setBild(Image bild) {
-		this.bild = bild;
 	}
 	
 	public Sender getSender() {

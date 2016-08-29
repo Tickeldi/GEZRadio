@@ -25,13 +25,13 @@ public class Folge implements Comparable<Folge>{
 	private Date gesendet;
 	
 
-	public Folge(URL url, Sendung sendung) throws IOException, UnsupportedFileTypeException {
+	private Folge(URL url, Sendung sendung) throws IOException, UnsupportedFileTypeException {
 		audioDatei = new MP3UrlFile(url);
 		titel = url.getPath().replaceAll(".+/|\\..*", "");
 		this.sendung = sendung;
 	}
 	
-	public Folge(String titel,
+	private Folge(String titel,
 			Image bild, 
 			URL url, 
 			String beschreibung, 
@@ -48,13 +48,13 @@ public class Folge implements Comparable<Folge>{
 	
 	private MP3UrlFile getAudioDatei() 
 			throws IOException, UnsupportedFileTypeException {
-		if(audioDatei == null)
+		if(audioDatei == null && !file.exists())
 			audioDatei = new MP3UrlFile(fileurl);
 		return audioDatei;
 	}
 
 	public int getLaenge() throws IOException, UnsupportedFileTypeException {
-		if(laenge == 0) {
+		if(laenge < 1) {
 			laenge = getAudioDatei().getDuration();
 		}
 		return laenge;
@@ -153,6 +153,59 @@ public class Folge implements Comparable<Folge>{
 	
 	public void setArtikelURL(URL artikelurl) {
 		this.artikelurl = artikelurl;
+	}
+	
+	public static class Builder {
+		private String titel;
+		private Image bild;
+		private URL fileURL;
+		private String beschreibung;
+		private Integer laenge;
+		private Sendung sendung;
+		private Date gesendet;
+		
+		public Builder(Sendung sendung, URL fileURL) {
+			this.fileURL = fileURL;
+			this.sendung = sendung;
+		}
+		
+		public Builder titel(String titel) {
+			this.titel = titel;
+			return this;
+		}
+		
+		public Builder bild(Image image) {
+			this.bild = image;
+			return this;
+		}
+		
+		public Builder beschreibung(String beschreibung) {
+			this.beschreibung = beschreibung;
+			return this;
+		}
+		
+		public Builder laenge(int laenge) {
+			this.laenge = laenge;
+			return this;
+		}
+		
+		public Builder gesendet(Date gesendet) {
+			this.gesendet = gesendet;
+			return this;
+		}
+		
+		public Folge build() {
+			return new Folge(
+					titel, 
+					bild, 
+					fileURL, 
+					beschreibung, 
+					laenge, 
+					sendung, 
+					gesendet
+					);
+		}
+		
 	}
 
 	@Override

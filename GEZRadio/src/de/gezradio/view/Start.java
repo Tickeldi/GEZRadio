@@ -2,10 +2,14 @@ package de.gezradio.view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+
+import de.gezradio.exceptions.PluginBrokenException;
 
 public class Start extends JFrame {
 
@@ -23,6 +27,7 @@ public class Start extends JFrame {
 			public void run() {
 				try {
 					Start frame = new Start();
+					frame.pack();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,7 +44,14 @@ public class Start extends JFrame {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+//		contentPane.setLayout(new BorderLayout(0, 0));
+		try {
+			JTable table = new JTable(new SenderTableModel());
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+			contentPane.add(table);
+		} catch (IOException | PluginBrokenException e) {
+			e.printStackTrace();
+		}
 		setContentPane(contentPane);
 	}
 
